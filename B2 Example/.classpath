@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER">
+		<attributes>
+			<attribute name="owner.project.facets" value="java"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
+	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
+	<classpathentry kind="lib" path="C:/Users/egodoy/Desktop/Blackboard Building Blocks Starter kit/eclipse/Common Libs/bb-platform-9.1.130093.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/egodoy/Desktop/Blackboard Building Blocks Starter kit/eclipse/Common Libs/bb-taglibs-9.1.130093.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/egodoy/Desktop/Blackboard Building Blocks Starter kit/eclipse/Common Libs/java-json.jar"/>
+	<classpathentry kind="lib" path="C:/Users/egodoy/Desktop/Blackboard Building Blocks Starter kit/eclipse/Common Libs/javax.servlet.jar"/>
+	<classpathentry kind="lib" path="C:/Users/egodoy/Desktop/Blackboard Building Blocks Starter kit/eclipse/Common Libs/json-simple-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/egodoy/Desktop/Blackboard Building Blocks Starter kit/eclipse/Common Libs/jsp-api-2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/egodoy/Desktop/Blackboard Building Blocks Starter kit/eclipse/Common Libs/jstl.jar"/>
+	<classpathentry kind="lib" path="C:/Users/egodoy/Desktop/Blackboard Building Blocks Starter kit/eclipse/Common Libs/log4j.jar"/>
+	<classpathentry kind="lib" path="C:/Users/egodoy/Desktop/Blackboard Building Blocks Starter kit/eclipse/Common Libs/slf4j-api-1.7.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/egodoy/Desktop/Blackboard Building Blocks Starter kit/eclipse/Common Libs/slf4j-simple-1.7.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/egodoy/Desktop/Blackboard Building Blocks Starter kit/eclipse/Common Libs/bb-cms-admin-9.1.201404.160205.jar"/>
+	<classpathentry kind="output" path="build/classes"/>
+</classpath>
