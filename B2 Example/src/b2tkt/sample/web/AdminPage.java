@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,41 +20,91 @@ import blackboard.persist.Id;
 import blackboard.persist.KeyNotFoundException;
 import blackboard.persist.PersistenceException;
 import blackboard.persist.course.CourseDbPersister;
+import blackboard.platform.contentarea.Attachment;
+import blackboard.platform.contentarea.ContentArea;
+import blackboard.platform.contentarea.service.ContentAreaDbPersister;
 import blackboard.platform.context.Context;
 import blackboard.platform.context.ContextManagerFactory;
 import blackboard.platform.plugin.PlugInUtil;
 import blackboard.platform.validation.ConstraintViolationException;
 import blackboard.data.ValidationException;
+import blackboard.data.content.BlankPage;
+import blackboard.data.content.Content;
 import blackboard.data.content.Folder;
 import blackboard.data.course.Course;
 import blackboard.admin.data.course.CourseSite;
 import blackboard.admin.persist.course.CloneConfig;
 import blackboard.admin.persist.course.CourseSiteLoader;
 import blackboard.admin.persist.course.CourseSitePersister;
+import blackboard.base.FormattedText;
 import blackboard.persist.course.CourseDbLoader;
 
 @Controller
 public class AdminPage {
 	
 //-------------------------------------------------------------------------------------------------------------------------------
-		
-	/*private void PassArray(){
-    String[] arrayw = new String[4]; //populate array
-    PrintA(arrayw);
-}
 
-private void PrintA(String[] a){
-    //do whatever with array here
-}*/
+	public void CreateContent(int type, JSONArray array)
+	{
+		switch (type)
+		{
+			case 1:				
+				try {					
+					ContentArea cArea = new ContentArea();
+					cArea.setId((Id) array.get(0));
+					cArea.setTitle((String) array.get(1));
+					cArea.setText((FormattedText) array.get(2));
+					ContentAreaDbPersister ContAreaPersi;
+					ContAreaPersi= ContentAreaDbPersister.Default.getInstance();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (PersistenceException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					}				
+				break;
+			case 2:
+				try {
+					BlankPage oBlankPage = new BlankPage();
+					oBlankPage.setId((Id) array.get(0));
+					oBlankPage.setTitle((String) array.get(1));
+					oBlankPage.addContent((Content) array.get(1));
+					oBlankPage.setAllowObservers(true);
+					oBlankPage.setIsAvailable(true);
+					oBlankPage.setIsTracked(true);				
+					
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					}
+				break;
+			case 3:
+				try {
+					Attachment Attach = new Attachment();
+					Attach.setFile(null);
+					Attach.setFileName((String) array.get(1));
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					}
+				break;
+			case 4:
+				
+				
+				break;
+		}
+	}
+	
 	public String CreateCourse(String[] cadena){
 		
 		String msg = "";
 		try {
 			Course c = new Course();
 			msg += "New Course <br>";
-			c.setCourseId(cadena[0]);
+			c.setCourseId(cadena[cadena.length-2]);
 			msg += "New Course id<br>";
-			c.setTitle(cadena[1]);	
+			c.setTitle(cadena[cadena.length-1]);	
 			msg += "New Course name<br>";
 						
 			CourseDbPersister CP;
@@ -73,7 +126,7 @@ private void PrintA(String[] a){
 		return msg;
 	}
 //-------------------------------------------------------------------------------------------------------------------------------
-	
+	//preguntar a Rey
 	@RequestMapping(value = {"AdminPage"}, method = RequestMethod.POST)
     public String AdminPage(final HttpServletRequest request, final HttpServletResponse response, final ModelMap model) throws UnsupportedEncodingException,
             PersistenceException, IOException {
@@ -88,44 +141,25 @@ String msg = "NO RESULTS </br>";
         	CourseDbLoader CDBL = CourseDbLoader.Default.getInstance();
         	
         	Course C = new Course();
-        	Id CId = null;
+        	//Id CId = null;
         	//String CourseId = "jsonRecibido";
-        	//String [][] CourseId = cadena();
+        	//String [][] CourseId = kidney();
         	
-        	if(CDBL.doesCourseIdExist(json[0])){       		
-        			CDBP.deleteById(CDBL.loadByCourseId(json[0]).getId());
+        	if(CDBL.doesCourseIdExist(json[json.length-2])){       		
+        			CDBP.deleteById(CDBL.loadByCourseId(json[json.length-2]).getId());
         	}
         	
         	//Set CourseId & CourseBatchUid
-        	C.setCourseId(json[0]);
-        	C.setBatchUid(json[1]);        		
+        	C.setCourseId(json[json.length-2]);
+        	C.setBatchUid(json[json.length-1]);        		
         	    		
         	//Set CourseId & CourseBatchUid
-        	C.setShowInCatalog(true); 
-        	/*for(int i=0;i<CourseId.length;i++)
-        	{
-        		
-        	}*/
+        	C.setShowInCatalog(true);        	
     		C.setTitle(json[1]);
     		msg = "FINISHED COURSE SETTINGS</br>";
-    		
-    		/*
-    		CId = C.getId();
-    		
-    		CourseToc CourseContent = new CourseToc();
-    		
-    		CourseContent.setCourseId(CId);
-    		//Id ContentId = generateId();
-    		
-    		//CourseContent.setC
-    		CourseContent.setTargetType(CourseToc.Target.CONTENT);
-    		CourseContent.setLabel("Test Content");
-    		CourseContent.setContentAvailable(true);
-    		*/
+    	
     		CDBP.persist(C);
-    		//CourseContent.persist();
-    		
-    		
+    		//CourseContent.persist();    		
     		msg += "FINISHED PERSISTING COURSE</br>";
     		
     		
