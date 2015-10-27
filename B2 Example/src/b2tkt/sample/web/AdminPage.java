@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.springframework.stereotype.Controller;
@@ -83,6 +86,10 @@ public class AdminPage {
 				try {
 					Attachment Attach = new Attachment();
 					Attach.setFile(null);
+					
+					File f = new File("sdsajkdfsajkd");
+					
+					Attach.setFile(f);
 					Attach.setFileName((String) array.get(1));
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
@@ -126,41 +133,54 @@ public class AdminPage {
 		return msg;
 	}
 //-------------------------------------------------------------------------------------------------------------------------------
-	//preguntar a Rey
+	
 	@RequestMapping(value = {"AdminPage"}, method = RequestMethod.POST)
-    public String AdminPage(final HttpServletRequest request, final HttpServletResponse response, final ModelMap model) throws UnsupportedEncodingException,
+    public String getAdminPage(final HttpServletRequest request, final HttpServletResponse response, final ModelMap model) throws UnsupportedEncodingException,
             PersistenceException, IOException {
-
-String msg = "NO RESULTS </br>";
-		
+		String msg = "NO RESULTS </br>";
+		CourseDbPersister CDBP;
+		CourseDbLoader CDBL;
         try {
-        	String[] json = ((String) request.getAttribute("jsonRecibido")).split(",");
-            Context ctx = ContextManagerFactory.getInstance().getContext();
-            ContextManagerFactory.getInstance().setContext(request);        	
-        	CourseDbPersister CDBP = CourseDbPersister.Default.getInstance();
-        	CourseDbLoader CDBL = CourseDbLoader.Default.getInstance();
-        	
-        	Course C = new Course();
-        	//Id CId = null;
-        	//String CourseId = "jsonRecibido";
-        	//String [][] CourseId = kidney();
-        	
-        	if(CDBL.doesCourseIdExist(json[json.length-2])){       		
-        			CDBP.deleteById(CDBL.loadByCourseId(json[json.length-2]).getId());
-        	}
+        	//Funcion que me envia el json
+        	JSONObject jsonRecibido = ;
+			JSONObject oJson =  (JSONObject)jsonRecibido;        	
+            oJson.get("courseid");
+            
+        	Course C = new Course();      	
+        	/*	if(CDBL.doesCourseIdExist((String) oJson.get("CourseId"))){       		
+        			CDBP.deleteById(CDBL.loadByCourseId((String) oJson.get("CourseId")));
+        	}*/
         	
         	//Set CourseId & CourseBatchUid
-        	C.setCourseId(json[json.length-2]);
-        	C.setBatchUid(json[json.length-1]);        		
+        	C.setCourseId((String) oJson.get("CourseId"));
+        	C.setBatchUid((String) oJson.get("NameId"));        		
         	    		
         	//Set CourseId & CourseBatchUid
         	C.setShowInCatalog(true);        	
-    		C.setTitle(json[1]);
+    		C.setTitle((String) oJson.get("NameId"));
     		msg = "FINISHED COURSE SETTINGS</br>";
+    		
+    		oJson.keySet();
     	
     		CDBP.persist(C);
+    		JSONArray temp = null;
+    		  
+    		  for(int i = 1; i < oJson.size(); i++){
+    		  
+    		  System.out.println(((JSONObject)oJson.get(i)).get("name"));
+    		  
+    		  temp = (JSONArray)((JSONObject)oJson.get(i)).get("modules");
+    		  
+    		  for(int j = 0; j < temp.length(); j++){
+    			  if(((JSONObject)temp.get(j)).get("modname") == "Url" ){
+    				  CreateContent(1,temp);
+    			  }
+    			  System.out.println("------" + ((JSONObject)temp.get(j)).get("name") + " -- " +((JSONObject)temp.get(j)).get("modname") + " -- " + ((JSONObject)temp.get(j)).get("modplural"));
+    		  }
+    		}
     		//CourseContent.persist();    		
     		msg += "FINISHED PERSISTING COURSE</br>";
+    		
     		
     		
         } catch (Exception e) {
