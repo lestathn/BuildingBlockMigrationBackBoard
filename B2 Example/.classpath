@@ -19,5 +19,18 @@
 	<classpathentry kind="lib" path="C:/Users/egodoy/Desktop/Blackboard Building Blocks Starter kit/eclipse/Common Libs/slf4j-api-1.7.7.jar"/>
 	<classpathentry kind="lib" path="C:/Users/egodoy/Desktop/Blackboard Building Blocks Starter kit/eclipse/Common Libs/slf4j-simple-1.7.7.jar"/>
 	<classpathentry kind="lib" path="C:/Users/egodoy/Desktop/Blackboard Building Blocks Starter kit/eclipse/Common Libs/bb-cms-admin-9.1.201404.160205.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jruiz/Downloads/ecliipse/eclipse/Common Libs/json-simple-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jruiz/Desktop/java/eclipse/Common Libs/bb-cms-admin-9.1.201404.160205.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jruiz/Desktop/java/eclipse/Common Libs/bb-platform-9.1.130093.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jruiz/Desktop/java/eclipse/Common Libs/bb-taglibs-9.1.130093.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jruiz/Desktop/java/eclipse/Common Libs/javax.servlet.jsp.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jruiz/Desktop/java/eclipse/Common Libs/javax.servlet.jsp.jstl-api-1.2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jruiz/Desktop/java/eclipse/Common Libs/servlet-api.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jruiz/Desktop/java/eclipse/Common Libs/java-json.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jruiz/Desktop/java/eclipse/Common Libs/jsp-api-2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jruiz/Desktop/java/eclipse/Common Libs/jstl.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jruiz/Desktop/java/eclipse/Common Libs/log4j.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jruiz/Desktop/java/eclipse/Common Libs/slf4j-api-1.7.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/jruiz/Desktop/java/eclipse/Common Libs/slf4j-simple-1.7.7.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
