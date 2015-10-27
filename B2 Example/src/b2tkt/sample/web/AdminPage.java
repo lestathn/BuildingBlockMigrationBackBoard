@@ -4,10 +4,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,41 +23,95 @@ import blackboard.persist.Id;
 import blackboard.persist.KeyNotFoundException;
 import blackboard.persist.PersistenceException;
 import blackboard.persist.course.CourseDbPersister;
+import blackboard.platform.contentarea.Attachment;
+import blackboard.platform.contentarea.ContentArea;
+import blackboard.platform.contentarea.service.ContentAreaDbPersister;
 import blackboard.platform.context.Context;
 import blackboard.platform.context.ContextManagerFactory;
 import blackboard.platform.plugin.PlugInUtil;
 import blackboard.platform.validation.ConstraintViolationException;
 import blackboard.data.ValidationException;
+import blackboard.data.content.BlankPage;
+import blackboard.data.content.Content;
 import blackboard.data.content.Folder;
 import blackboard.data.course.Course;
 import blackboard.admin.data.course.CourseSite;
 import blackboard.admin.persist.course.CloneConfig;
 import blackboard.admin.persist.course.CourseSiteLoader;
 import blackboard.admin.persist.course.CourseSitePersister;
+import blackboard.base.FormattedText;
 import blackboard.persist.course.CourseDbLoader;
 
 @Controller
 public class AdminPage {
 	
 //-------------------------------------------------------------------------------------------------------------------------------
-		
-	/*private void PassArray(){
-    String[] arrayw = new String[4]; //populate array
-    PrintA(arrayw);
-}
 
-private void PrintA(String[] a){
-    //do whatever with array here
-}*/
+	public void CreateContent(int type, JSONArray array)
+	{
+		switch (type)
+		{
+			case 1:				
+				try {					
+					ContentArea cArea = new ContentArea();
+					cArea.setId((Id) array.get(0));
+					cArea.setTitle((String) array.get(1));
+					cArea.setText((FormattedText) array.get(2));
+					ContentAreaDbPersister ContAreaPersi;
+					ContAreaPersi= ContentAreaDbPersister.Default.getInstance();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (PersistenceException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					}				
+				break;
+			case 2:
+				try {
+					BlankPage oBlankPage = new BlankPage();
+					oBlankPage.setId((Id) array.get(0));
+					oBlankPage.setTitle((String) array.get(1));
+					oBlankPage.addContent((Content) array.get(1));
+					oBlankPage.setAllowObservers(true);
+					oBlankPage.setIsAvailable(true);
+					oBlankPage.setIsTracked(true);				
+					
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					}
+				break;
+			case 3:
+				try {
+					Attachment Attach = new Attachment();
+					Attach.setFile(null);
+					
+					File f = new File("sdsajkdfsajkd");
+					
+					Attach.setFile(f);
+					Attach.setFileName((String) array.get(1));
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					}
+				break;
+			case 4:
+				
+				
+				break;
+		}
+	}
+	
 	public String CreateCourse(String[] cadena){
 		
 		String msg = "";
 		try {
 			Course c = new Course();
 			msg += "New Course <br>";
-			c.setCourseId(cadena[0]);
+			c.setCourseId(cadena[cadena.length-2]);
 			msg += "New Course id<br>";
-			c.setTitle(cadena[1]);	
+			c.setTitle(cadena[cadena.length-1]);	
 			msg += "New Course name<br>";
 						
 			CourseDbPersister CP;
@@ -75,58 +135,52 @@ private void PrintA(String[] a){
 //-------------------------------------------------------------------------------------------------------------------------------
 	
 	@RequestMapping(value = {"AdminPage"}, method = RequestMethod.POST)
-    public String AdminPage(final HttpServletRequest request, final HttpServletResponse response, final ModelMap model) throws UnsupportedEncodingException,
+    public String getAdminPage(final HttpServletRequest request, final HttpServletResponse response, final ModelMap model) throws UnsupportedEncodingException,
             PersistenceException, IOException {
-
-String msg = "NO RESULTS </br>";
-		
+		String msg = "NO RESULTS </br>";
+		CourseDbPersister CDBP;
+		CourseDbLoader CDBL;
         try {
-        	String[] json = ((String) request.getAttribute("jsonRecibido")).split(",");
-            Context ctx = ContextManagerFactory.getInstance().getContext();
-            ContextManagerFactory.getInstance().setContext(request);        	
-        	CourseDbPersister CDBP = CourseDbPersister.Default.getInstance();
-        	CourseDbLoader CDBL = CourseDbLoader.Default.getInstance();
-        	
-        	Course C = new Course();
-        	Id CId = null;
-        	//String CourseId = "jsonRecibido";
-        	//String [][] CourseId = cadena();
-        	
-        	if(CDBL.doesCourseIdExist(json[0])){       		
-        			CDBP.deleteById(CDBL.loadByCourseId(json[0]).getId());
-        	}
+        	//Funcion que me envia el json
+        	JSONObject jsonRecibido = ;
+			JSONObject oJson =  (JSONObject)jsonRecibido;        	
+            oJson.get("courseid");
+            
+        	Course C = new Course();      	
+        	/*	if(CDBL.doesCourseIdExist((String) oJson.get("CourseId"))){       		
+        			CDBP.deleteById(CDBL.loadByCourseId((String) oJson.get("CourseId")));
+        	}*/
         	
         	//Set CourseId & CourseBatchUid
-        	C.setCourseId(json[0]);
-        	C.setBatchUid(json[1]);        		
+        	C.setCourseId((String) oJson.get("CourseId"));
+        	C.setBatchUid((String) oJson.get("NameId"));        		
         	    		
         	//Set CourseId & CourseBatchUid
-        	C.setShowInCatalog(true); 
-        	/*for(int i=0;i<CourseId.length;i++)
-        	{
-        		
-        	}*/
-    		C.setTitle(json[1]);
+        	C.setShowInCatalog(true);        	
+    		C.setTitle((String) oJson.get("NameId"));
     		msg = "FINISHED COURSE SETTINGS</br>";
     		
-    		/*
-    		CId = C.getId();
-    		
-    		CourseToc CourseContent = new CourseToc();
-    		
-    		CourseContent.setCourseId(CId);
-    		//Id ContentId = generateId();
-    		
-    		//CourseContent.setC
-    		CourseContent.setTargetType(CourseToc.Target.CONTENT);
-    		CourseContent.setLabel("Test Content");
-    		CourseContent.setContentAvailable(true);
-    		*/
+    		oJson.keySet();
+    	
     		CDBP.persist(C);
-    		//CourseContent.persist();
-    		
-    		
+    		JSONArray temp = null;
+    		  
+    		  for(int i = 1; i < oJson.size(); i++){
+    		  
+    		  System.out.println(((JSONObject)oJson.get(i)).get("name"));
+    		  
+    		  temp = (JSONArray)((JSONObject)oJson.get(i)).get("modules");
+    		  
+    		  for(int j = 0; j < temp.length(); j++){
+    			  if(((JSONObject)temp.get(j)).get("modname") == "Url" ){
+    				  CreateContent(1,temp);
+    			  }
+    			  System.out.println("------" + ((JSONObject)temp.get(j)).get("name") + " -- " +((JSONObject)temp.get(j)).get("modname") + " -- " + ((JSONObject)temp.get(j)).get("modplural"));
+    		  }
+    		}
+    		//CourseContent.persist();    		
     		msg += "FINISHED PERSISTING COURSE</br>";
+    		
     		
     		
         } catch (Exception e) {
